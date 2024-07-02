@@ -1,0 +1,31 @@
+function sendEmailBasedOnSheetData() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var values = sheet.getDataRange().getValues();
+  
+  // Mapping of initials to email addresses
+  var emailMapping = {
+    
+     
+  };
+  
+  var subject = 'Test:Time Sheet Tracker';
+  var targetColumnC = 3; // The column index to check for initials (3 for column C)
+  var targetColumnD = 8; // The column index to check for "enter" (4 for column D)
+  var searchStringD = 'enter'; // The string you're searching for in column D
+
+  for (var i = 0; i < values.length; i++) {
+    var cellValueC = values[i][targetColumnC - 1]; // Adjusting for zero-based index
+    var cellValueD = values[i][targetColumnD - 1]; // Adjusting for zero-based index
+
+    if (cellValueD === searchStringD && emailMapping[cellValueC]) {
+      var emailAddress = emailMapping[cellValueC];
+      var rowValueA = values[i][0]; // Get the value from column A
+      var messageBody = 'Please fill the delivery tracker for : ' + rowValueA + '\n';
+      
+      // Send email
+      MailApp.sendEmail(emailAddress, subject, messageBody);
+    }
+  }
+}
+
+
